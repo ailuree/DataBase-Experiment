@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>投票结果</title>
+    <meta charset="utf-8">
+    <script>
+        function changeSort(value) {
+            window.location.href = '/result?sort=' + value;
+        }
+    </script>
+</head>
+<body>
+    <p align="center"><img src="{{ url_for('static', filename='title_3.jpg') }}"></p>
+    
+    <div align="center" style="margin-bottom: 10px;">
+        排序方式：
+        <select id="sortOrder" onchange="changeSort(this.value)">
+            <option value="default" {% if sort == 'default' %}selected{% endif %}>默认排序</option>
+            <option value="name" {% if sort == 'name' %}selected{% endif %}>按姓名排序</option>
+            <option value="score" {% if sort == 'score' %}selected{% endif %}>按得票数排序</option>
+        </select>
+    </div>
+    
+    <table align="center" width="600" border="1" bordercolor="#990033">
+        <tr bgcolor="#CC66FF">
+            <td align="center"><font color="#FFFFFF">候选人</font></td>
+            <td align="center"><font color="#FFFFFF">得票数</font></td>
+            <td align="center"><font color="#FFFFFF">得票百分比</font></td>
+            <td align="center"><font color="#FFFFFF">直方图</font></td>
+        </tr>
+        {% for candidate in candidates %}
+        <tr bgcolor="#FFCCFF">
+            <td align="center">{{ candidate.name }}</td>
+            <td align="center">{{ candidate.score }}</td>
+            <td align="center">{{ candidate.percent }}%</td>
+            <td height="35">
+                <img src="{{ url_for('static', filename='bar.jpg') }}" 
+                     width="{{ candidate.percent * 3 }}" height="20">
+            </td>
+        </tr>
+        {% endfor %}
+        <tr bgcolor="#FFCCFF">
+            <td align="center">总计</td>
+            <td align="center">{{ total_score }}</td>
+            <td align="center">100%</td>
+            <td><img src="{{ url_for('static', filename='bar.jpg') }}" width="300" height="20"></td>
+        </tr>
+    </table>
+    <p align="center"><a href="{{ url_for('index') }}">回首页</a></p>
+</body>
+</html> 

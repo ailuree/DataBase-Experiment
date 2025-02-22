@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>宠物电子相册</title>
+</head>
+<body>
+    <p align="center"><img src="{{ url_for('static', filename='Title.png') }}"></p>
+    <form action="{{ url_for('edit_photo', photo_id=photo.id) }}" method="post">
+        <table align="center">
+            <tr>
+                <td>相片名称：</td>
+                <td>
+                    <input type="text" name="photo_name" size="31" value="{{ photo.name }}" required>
+                </td>
+            </tr>
+            <tr>
+                <td>相片描述：</td>
+                <td>
+                    <textarea name="photo_comment" rows="5" cols="25">{{ photo.comment }}</textarea>
+                    <input type="hidden" name="photo_id" value="{{ photo.id }}">
+                    <input type="hidden" name="album_id" value="{{ photo.album_id }}">
+                    <input type="submit" value="更新" {% if photo.owner != session.get('login_user') %}disabled{% endif %}>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <br><a href="{{ url_for('show_album', album_id=photo.album_id) }}">
+                        回【{{ photo.album_name }}】相册</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html> 

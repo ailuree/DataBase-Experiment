@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>宠物电子相册</title>
+</head>
+<body>
+    <p align="center"><img src="{{ url_for('static', filename='Title.png') }}"></p>
+    <p align="center">{{ album_name }}</p>
+    <form action="{{ url_for('upload_photo', album_id=album_id) }}" method="post" enctype="multipart/form-data">
+        <p align="center">
+            <input type="file" name="photos" size="50" multiple><br><br>
+            <input type="submit" value="上传">
+            <input type="reset" value="重新设置">
+        </p>
+    </form>
+    <p align="center">
+        <a href="{{ url_for('show_album', album_id=album_id) }}">回相册</a>
+    </p>
+</body>
+</html> 

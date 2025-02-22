@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>线上投票</title>
+    <meta charset="utf-8">
+    <script type="text/javascript">
+        function validate_form() {
+            var id = document.getElementById('id_number').value.toUpperCase();
+            if (id.length != 10) {
+                alert("身份证号码必须是10位");
+                return false;
+            }
+            if (!/^[A-Z]/.test(id)) {
+                alert("身份证号码第一位必须是英文字母");
+                return false;
+            }
+            if (!/^[A-Z][0-9]{9}$/.test(id)) {
+                alert("身份证号码后9位必须是数字");
+                return false;
+            }
+
+            // 检查是否选择了候选人
+            var candidates = document.getElementsByName('name');
+            var selected = false;
+            for (var i = 0; i < candidates.length; i++) {
+                if (candidates[i].checked) {
+                    selected = true;
+                    break;
+                }
+            }
+            if (!selected) {
+                alert("请选择一位候选人");
+                return false;
+            }
+
+            return true;
+        }
+
+        function changeSort(value) {
+            window.location.href = '/?sort=' + value;
+        }
+    </script>
+</head>
+
+<body bgcolor="#FFE6CC">
+    <p align="center"><img src="{{ url_for('static', filename='title_1.jpg') }}"></p>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <p style="color: red; text-align: center;">{{ message }}</p>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div align="center" style="margin-bottom: 10px;">
+        排序方式：
+        <select id="sortOrder" onchange="changeSort(this.value)">
+            <option value="default" {% if sort=='default' %}selected{% endif %}>默认排序</option>
+            <option value="name" {% if sort=='name' %}selected{% endif %}>按姓名排序</option>
+        </select>
+    </div>
+
+    <form action="{{ url_for('vote') }}" method="post" onsubmit="return validate_form()">
+        <table width="75%" align="center" border="2" bordercolor="#999999">
+            <tr bgcolor="#0033CC">
+                <td align="center">
+                    <font color="#FFFFFF">候选人</font>
+                </td>
+                <td align="center">
+                    <font color="#FFFFFF">候选人介绍</font>
+                </td>
+            </tr>
+            {% for candidate in candidates %}
+            <tr>
+                <td bgcolor="#CCFFCC">
+                    <input type="radio" name="name" value="{{ candidate.name }}">{{ candidate.name }}
+                </td>
+                <td bgcolor="#FFCCCC">{{ candidate.introduction }}</td>
+            </tr>
+            {% endfor %}
+            <tr bgcolor="#FFFF99">
+                <td colspan="2" align="right">
+                    请输入您的身份证号码：
+                    <input type="text" name="id" id="id_number" size="10">
+                </td>
+            </tr>
+        </table>
+        <p align="center">
+            <input type="submit" value="投票">
+            <input type="reset" value="重新设置">
+            <input type="button" value="推荐候选人" onclick="window.location.href='{{ url_for('recommend') }}';">
+            <input type="button" value="查看投票结果" onclick="window.location.href='{{ url_for('result') }}';">
+        </p>
+    </form>
+</body>
+
+</html>

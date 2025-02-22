@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>宠物电子相册</title>
+    <meta charset="utf-8">
+    <script type="text/javascript">
+        function deleteAlbum(album_id) {
+            if (confirm("请确认是否删除此相册？")) {
+                window.location.href = "/delete_album/" + album_id;
+            }
+        }
+    </script>
+</head>
+<body>
+    <p align="center"><img src="{{ url_for('static', filename='Title.png') }}"></p>
+    <p align="center">{{ albums|length }} Albums</p>
+    <table border="0" align="center">
+        {% set album_per_row = 5 %}
+        {% for album in albums %}
+            {% if loop.index0 % album_per_row == 0 %}
+                <tr align="center" valign="top">
+            {% endif %}
+            
+            <td width="160px">
+                <a href="{{ url_for('show_album', album_id=album.id) }}">
+                    <img src="{{ url_for('static', filename='Thumbnail/' + album.cover) }}" 
+                         style="border-color:Black;border-width:1px">
+                    <br>{{ album.name }}</a>
+                <br>{{ album.total_photos }} Pictures
+                
+                {% if login_user and album.owner == login_user %}
+                    <br>
+                    <a href="{{ url_for('edit_album', album_id=album.id) }}">编辑</a>
+                    <a href="#" onclick="deleteAlbum({{ album.id }})">删除</a>
+                {% endif %}
+                <p></p>
+            </td>
+            
+            {% if loop.index % album_per_row == 0 or loop.last %}
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+    
+    <hr>
+    <p align="center">
+        {% if not login_name %}
+            <a href="{{ url_for('login') }}">登录</a>
+        {% else %}
+            <a href="{{ url_for('add_album') }}">新增相册</a>
+            <a href="{{ url_for('logout') }}">注销【{{ login_name }}】</a>
+        {% endif %}
+    </p>
+</body>
+</html> 

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>推荐候选人</title>
+</head>
+<body>
+    <p align="center"><img src="{{ url_for('static', filename='title_2.jpg') }}"></p>
+    
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color: red; text-align: center;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <form action="{{ url_for('recommend') }}" method="post">
+        <table width="650" align="center" border="1">
+            <tr bgcolor="#FFFFCC">
+                <td align="right">候选人姓名：</td>
+                <td><input type="text" name="name" size="10" required></td>
+            </tr>
+            <tr>
+                <td bgcolor="#CCFFCC" align="right">候选人简介：</td>
+                <td bgcolor="#CCFFCC">
+                    <textarea name="introduction" cols="40" rows="3" required></textarea>
+                </td>
+            </tr>
+        </table>
+        <br>
+        <div align="center">
+            <input type="submit" value="确定">
+            <input type="reset" value="重新输入">
+        </div>
+    </form>
+    <p align="center"><a href="{{ url_for('index') }}">回首页</a></p>
+</body>
+</html> 

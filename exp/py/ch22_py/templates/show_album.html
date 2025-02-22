@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>宠物电子相册</title>
+    <meta charset="utf-8">
+    <script type="text/javascript">
+        function deletePhoto(album_id, photo_id) {
+            if (confirm("请确认是否删除此相片？")) {
+                window.location.href = "/delete_photo/" + album_id + "/" + photo_id;
+            }
+        }
+    </script>
+</head>
+<body>
+    <p align="center"><img src="{{ url_for('static', filename='Title.png') }}"></p>
+    <p align="center">{{ album.name }}</p>
+    
+    <table border="0" align="center">
+        {% set photo_per_row = 5 %}
+        {% for photo in photos %}
+            {% if loop.index0 % photo_per_row == 0 %}
+                <tr align="center">
+            {% endif %}
+            
+            <td width="160px">
+                <a href="{{ url_for('photo_detail', album_id=album.id, photo_id=photo.id) }}">
+                    <img src="{{ url_for('static', filename='Thumbnail/' + photo.filename) }}"
+                         style="border-color:Black;border-width:1px">
+                    <br>{{ photo.name }}</a>
+                
+                {% if session.get('login_user') == album.owner %}
+                    <br>
+                    <a href="{{ url_for('edit_photo', photo_id=photo.id) }}">编辑</a>
+                    <a href="#" onclick="deletePhoto({{ album.id }}, {{ photo.id }})">删除</a>
+                {% endif %}
+                <p></p>
+            </td>
+            
+            {% if loop.index % photo_per_row == 0 or loop.last %}
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+    
+    <hr>
+    <p align="center">
+        {% if session.get('login_user') == album.owner %}
+            <a href="{{ url_for('upload_photo', album_id=album.id) }}">上传相片</a>
+        {% endif %}
+        <a href="{{ url_for('index') }}">回首页</a>
+    </p>
+</body>
+</html> 

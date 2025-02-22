@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>宠物电子相册</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <p align="center"><img src="{{ url_for('static', filename='Title.png') }}"></p>
+    <p align="center">{{ album_name }}</p>
+    
+    <p align="center">
+        <img src="{{ url_for('static', filename='Photo/' + photo.filename) }}"
+             style="border-style:solid;border-width:1px">
+    </p>
+    <p align="center">{{ photo.comment }}</p>
+    
+    <hr>
+    <p align="center">
+        {% for nav_photo in nav_photos %}
+            {% if nav_photo.id == photo.id %}
+                <img src="{{ url_for('static', filename='Thumbnail/' + nav_photo.filename) }}"
+                     style="border-style:solid;border-color:Red;border-width:2px">
+            {% else %}
+                <a href="{{ url_for('photo_detail', album_id=album_id, photo_id=nav_photo.id) }}">
+                    <img src="{{ url_for('static', filename='Thumbnail/' + nav_photo.filename) }}"
+                         style="border-style:solid;border-color:Black;border-width:1px">
+                </a>
+            {% endif %}
+        {% endfor %}
+    </p>
+    
+    <p align="center">
+        <a href="{{ url_for('index') }}">回首页</a>
+        <a href="{{ url_for('show_album', album_id=album_id) }}">回【{{ album_name }}】相册</a>
+    </p>
+</body>
+</html> 
