@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>搜索教师</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>搜索教师</h1>
+        <div class="nav">
+            <a href="{{ url_for('logout') }}">退出登录</a>
+        </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <!-- 按姓名搜索 -->
+        <div class="search-section">
+            <h2>按姓名搜索</h2>
+            <form method="POST" action="{{ url_for('search') }}">
+                <div class="form-group">
+                    <label>教师姓名:</label>
+                    <input type="text" name="search_string" required>
+                    <input type="hidden" name="search_type" value="name">
+                </div>
+                <button type="submit">搜索</button>
+            </form>
+        </div>
+
+        <!-- 按ID搜索 -->
+        <div class="search-section">
+            <h2>按ID搜索</h2>
+            <form method="POST" action="{{ url_for('search') }}">
+                <div class="form-group">
+                    <label>教师ID (0-99999):</label>
+                    <input type="number" name="instructor_id" min="0" max="99999" required>
+                    <input type="hidden" name="search_type" value="id">
+                </div>
+                <button type="submit">搜索</button>
+            </form>
+        </div>
+        
+        {% if results %}
+            <h2>搜索结果:</h2>
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>姓名</th>
+                    <th>操作</th>
+                </tr>
+                {% for id, name in results %}
+                    <tr>
+                        <td>{{ id }}</td>
+                        <td>{{ name }}</td>
+                        <td><a href="{{ url_for('teaching_record', instructor_id=id) }}">查看教学记录</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    </div>
+</body>
+</html> 

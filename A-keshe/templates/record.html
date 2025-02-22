@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>教学记录</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>教学记录</h1>
+        <div class="nav">
+            <a href="{{ url_for('search') }}">返回搜索</a>
+            <a href="{{ url_for('logout') }}">退出登录</a>
+        </div>
+        {% if not records %}
+            <p>该教师没有教授任何课程</p>
+        {% else %}
+            <table>
+                <tr>
+                    <th>系名</th>
+                    <th>课程ID</th>
+                    <th>课程名称</th>
+                    <th>课程段号</th>
+                    <th>学期</th>
+                    <th>年份</th>
+                    <th>注册人数</th>
+                </tr>
+                {% for record in records %}
+                    <tr>
+                        <td>{{ record[0] }}</td>
+                        <td>{{ record[1] }}</td>
+                        <td>{{ record[2] }}</td>
+                        <td>{{ record[3] }}</td>
+                        <td>{{ record[4] }}</td>
+                        <td>{{ record[5] }}</td>
+                        <td>{{ record[6] }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    </div>
+</body>
+</html> 

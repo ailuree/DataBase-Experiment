@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+	<head>
+	  <meta charset="UTF-8"> 
+	  <title>移动商品目录</title>
+	  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css" />
+	  <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	  <script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+	  <script>
+	    var book_id = 0;
+	
+	    function get_book_info(mode)
+	    {
+	      $.get("file://C:/wamp/www/ch15/get_book_info.php", {book_id: book_id, mode: mode}, function(data){
+	        book_id = data.book_id;
+	        $("#bookimg").attr("src", data.image_name);
+	        $("#bookmsg").html(data.description);
+	      }, "json");
+	    }
+	  </script>
+	</head>
+  <body onload="javascript:get_book_info('next')">
+	  <div data-role="page" id="home">
+	    <div data-role="header" data-position="fixed">
+	    	<h1>移动商品目录</h1>
+	    </div>
+	    <div data-role="content">
+	      <img src="mobile_store.jpg" width="100%">
+	      <a href="#intro" data-rel="dialog" data-role="button" data-icon="arrow-r">快乐出版社简介</a>
+	      <a href="#book" data-role="button" data-icon="arrow-r">书籍介绍</a>
+	    </div>
+	    <div data-role="footer" data-position="fixed"><h4>&copy;快乐出版社</h4></div>
+	  </div>
+	  <div data-role="page" id="intro">
+	    <div data-role="header"><h1>快乐出版社简介</h1></div>
+	    <div data-role="content">
+	      <p>快乐出版社专门发行各类计算机书籍，绘图...等系列图书，若您有任何问题，请来电与我们联络。</p>
+	    </div>
+	  </div>
+	  <div data-role="page" id="book">
+	    <div data-role="header"><h1>书籍介绍</h1></div>
+	    <div data-role="content">
+	      <img id="bookimg" width="100%">
+	      <p id="bookmsg" />
+	    </div>
+	    <div data-role="footer" data-position="fixed">
+	      <div data-role="navbar">
+	        <ul>
+	          <li><a href="#home" class="ui-btn-active ui-state-persist">回首页</a></li>
+	          <li><a href="javascript:get_book_info('prev')">上一个</a></li>
+	          <li><a href="javascript:get_book_info('next')">下一个</a></li>
+	        </ul>
+	      </div>
+	    </div>
+	  </div>
+  </body>
+</html>
